@@ -1,0 +1,190 @@
+       table_name       |     column_name     |          data_type          | character_maximum_length | is_nullable |  column_default   | is_primary_key | is_foreign_key 
+------------------------+---------------------+-----------------------------+--------------------------+-------------+-------------------+----------------+----------------
+ ACCOUNTS               | account_id          | bigint                      |                          | NO          |                   | YES            | NO
+ ACCOUNTS               | user_id             | bigint                      |                          | NO          |                   | NO             | YES
+ ACCOUNTS               | balance             | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNTS               | total_asset         | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNTS               | profit              | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNTS               | profit_rate         | double precision            |                          | YES         |                   | NO             | NO
+ ACCOUNTS               | created_at          | text                        |                          | NO          |                   | NO             | NO
+ ACCOUNTS               | type                | text                        |                          | NO          |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | transaction_id      | integer                     |                          | NO          |                   | YES            | NO
+ ACCOUNT_TRANSACTION    | account_id          | bigint                      |                          | NO          |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | type                | text                        |                          | NO          |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | amount              | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | profit              | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | prev_balance        | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | after_balance       | integer                     |                          | YES         |                   | NO             | NO
+ ACCOUNT_TRANSACTION    | trade_id            | integer                     |                          | YES         |                   | NO             | YES
+ ACCOUNT_TRANSACTION    | created_at          | timestamp without time zone |                          | NO          |                   | NO             | NO
+ AI_STRATEGY            | strategy_id         | integer                     |                          | NO          |                   | YES            | NO
+ AI_STRATEGY            | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ AI_STRATEGY            | strategy            | text                        |                          | NO          |                   | NO             | NO
+ AI_STRATEGY            | prompt              | text                        |                          | YES         |                   | NO             | NO
+ AI_STRATEGY            | created_at          | timestamp without time zone |                          | NO          |                   | NO             | NO
+ CHART_PATTERN          | pattern_id          | integer                     |                          | NO          |                   | YES            | NO
+ CHART_PATTERN          | name                | text                        |                          | YES         |                   | NO             | NO
+ CHART_PATTERN          | description         | text                        |                          | YES         |                   | NO             | NO
+ CHART_PATTERN          | chart_img           | text                        |                          | YES         |                   | NO             | NO
+ DAILY_QUIZ_SCHEDULE    | schedule_id         | integer                     |                          | NO          |                   | YES            | NO
+ DAILY_QUIZ_SCHEDULE    | quiz_date           | date                        |                          | NO          |                   | NO             | NO
+ DAILY_QUIZ_SCHEDULE    | quiz_id             | integer                     |                          | NO          |                   | NO             | NO
+ DAILY_QUIZ_SCHEDULE    | start_time          | timestamp without time zone |                          | NO          |                   | NO             | NO
+ DAILY_QUIZ_SCHEDULE    | created_at          | timestamp without time zone |                          | YES         | CURRENT_TIMESTAMP | NO             | NO
+ DAILY_SOLVED           | solved_id           | integer                     |                          | NO          |                   | YES            | NO
+ DAILY_SOLVED           | solved_id           | integer                     |                          | NO          |                   | YES            | NO
+ DAILY_SOLVED           | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ DAILY_SOLVED           | user_id             | bigint                      |                          | NO          |                   | NO             | YES
+ DAILY_SOLVED           | quiz_id             | integer                     |                          | NO          |                   | NO             | YES
+ DAILY_SOLVED           | quiz_id             | integer                     |                          | NO          |                   | NO             | NO
+ DAILY_SOLVED           | score               | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | score               | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | bonus_amount        | integer                     |                          | YES         | 0                 | NO             | NO
+ DAILY_SOLVED           | bonus_amount        | integer                     |                          | YES         | 0                 | NO             | NO
+ DAILY_SOLVED           | ranking             | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | ranking             | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | solved_time_seconds | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | solved_time_seconds | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | solved_at           | date                        |                          | NO          |                   | NO             | NO
+ DAILY_SOLVED           | solved_at           | date                        |                          | NO          |                   | NO             | NO
+ DAILY_SOLVED           | streak              | integer                     |                          | YES         |                   | NO             | NO
+ DAILY_SOLVED           | streak              | integer                     |                          | YES         |                   | NO             | NO
+ FRAME                  | frame_id            | integer                     |                          | NO          |                   | YES            | NO
+ FRAME                  | frame_img           | text                        |                          | YES         |                   | NO             | NO
+ FRAME                  | price               | integer                     |                          | YES         |                   | NO             | NO
+ HAVE_FRAME             | have_id             | integer                     |                          | NO          |                   | YES            | NO
+ HAVE_FRAME             | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ HAVE_FRAME             | frame_id            | integer                     |                          | NO          |                   | NO             | YES
+ HISTORY_CHALLENGE      | challenge_id        | integer                     |                          | NO          |                   | YES            | NO
+ HISTORY_CHALLENGE      | theme               | text                        |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE      | stock_name          | text                        |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE      | stock_code          | text                        |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE      | start_date          | timestamp without time zone |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE      | end_date            | timestamp without time zone |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE      | origin_date         | timestamp without time zone |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | challenge_data_id   | integer                     |                          | NO          |                   | YES            | NO
+ HISTORY_CHALLENGE_DATA | challenge_id        | integer                     |                          | NO          |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | event_date_time     | timestamp without time zone |                          | NO          |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | origin_date_time    | timestamp without time zone |                          | NO          |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | open_price          | integer                     |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | high_price          | integer                     |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | low_price           | integer                     |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | close_price         | integer                     |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_DATA | volume              | integer                     |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_NEWS | challenge_news_id   | integer                     |                          | NO          |                   | YES            | NO
+ HISTORY_CHALLENGE_NEWS | challenge_id        | integer                     |                          | NO          |                   | NO             | YES
+ HISTORY_CHALLENGE_NEWS | title               | text                        |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_NEWS | content             | text                        |                          | YES         |                   | NO             | NO
+ HISTORY_CHALLENGE_NEWS | published_at        | timestamp without time zone |                          | NO          |                   | NO             | NO
+ INTEREST               | interest_id         | integer                     |                          | NO          |                   | YES            | NO
+ INTEREST               | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ INTEREST               | stock_info_id       | integer                     |                          | NO          |                   | NO             | NO
+ INVESTMENT_TERM        | term_id             | integer                     |                          | NO          |                   | YES            | NO
+ INVESTMENT_TERM        | term                | text                        |                          | YES         |                   | NO             | NO
+ INVESTMENT_TERM        | definition          | text                        |                          | YES         |                   | NO             | NO
+ INVESTMENT_TERM        | description         | text                        |                          | YES         |                   | NO             | NO
+ KNOW_TERM              | know_id             | integer                     |                          | NO          |                   | YES            | NO
+ KNOW_TERM              | know_id             | integer                     |                          | NO          |                   | YES            | NO
+ KNOW_TERM              | user_id             | bigint                      |                          | NO          |                   | NO             | YES
+ KNOW_TERM              | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ KNOW_TERM              | term_id             | integer                     |                          | NO          |                   | NO             | YES
+ KNOW_TERM              | term_id             | integer                     |                          | NO          |                   | NO             | NO
+ KNOW_TERM              | correct             | boolean                     |                          | YES         |                   | NO             | NO
+ KNOW_TERM              | correct             | boolean                     |                          | YES         |                   | NO             | NO
+ MOCK_TRADE             | trade_id            | integer                     |                          | NO          |                   | YES            | NO
+ MOCK_TRADE             | trade_id            | integer                     |                          | NO          |                   | YES            | NO
+ MOCK_TRADE             | account_id          | bigint                      |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | account_id          | bigint                      |                          | NO          |                   | NO             | YES
+ MOCK_TRADE             | stock_id            | integer                     |                          | NO          |                   | NO             | YES
+ MOCK_TRADE             | stock_id            | integer                     |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | buy_sell            | text                        |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | buy_sell            | text                        |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | quantity            | integer                     |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | quantity            | integer                     |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | price               | integer                     |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | price               | integer                     |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | trade_at            | timestamp without time zone |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | trade_at            | timestamp without time zone |                          | NO          |                   | NO             | NO
+ MOCK_TRADE             | commission          | numeric                     |                          | YES         |                   | NO             | NO
+ MOCK_TRADE             | commission          | numeric                     |                          | YES         |                   | NO             | NO
+ NEWS                   | news_id             | integer                     |                          | NO          |                   | YES            | NO
+ NEWS                   | title               | text                        |                          | YES         |                   | NO             | NO
+ NEWS                   | content             | text                        |                          | YES         |                   | NO             | NO
+ NEWS                   | sentiment           | text                        |                          | YES         |                   | NO             | NO
+ NEWS                   | summary             | text                        |                          | YES         |                   | NO             | NO
+ NEWS                   | published_at        | timestamp without time zone |                          | YES         |                   | NO             | NO
+ NEWS                   | type                | text                        |                          | YES         |                   | NO             | NO
+ PERSONALITY_QUESTION   | question_id         | integer                     |                          | NO          |                   | YES            | NO
+ PERSONALITY_QUESTION   | question            | text                        |                          | YES         |                   | NO             | NO
+ PERSONALITY_QUESTION   | options             | text                        |                          | YES         |                   | NO             | NO
+ PUSH_NOTIFICATION      | push_id             | integer                     |                          | NO          |                   | YES            | NO
+ PUSH_NOTIFICATION      | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ PUSH_NOTIFICATION      | title               | text                        |                          | YES         |                   | NO             | NO
+ PUSH_NOTIFICATION      | content             | text                        |                          | YES         |                   | NO             | NO
+ PUSH_NOTIFICATION      | type                | text                        |                          | YES         |                   | NO             | NO
+ PUSH_NOTIFICATION      | sent_at             | timestamp without time zone |                          | NO          |                   | NO             | NO
+ QUIZ                   | quiz_id             | integer                     |                          | NO          |                   | YES            | NO
+ QUIZ                   | question            | text                        |                          | YES         |                   | NO             | NO
+ QUIZ                   | answer              | boolean                     |                          | YES         |                   | NO             | NO
+ QUIZ                   | daily_date          | timestamp without time zone |                          | YES         |                   | NO             | NO
+ QUIZ                   | explanation         | text                        |                          | YES         |                   | NO             | NO
+ QUIZ                   | term_id             | integer                     |                          | YES         |                   | NO             | YES
+ RECAP                  | recap_id            | integer                     |                          | NO          |                   | YES            | NO
+ RECAP                  | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ RECAP                  | created_at          | text                        |                          | NO          |                   | NO             | NO
+ RECAP                  | max_gain            | text                        |                          | YES         |                   | NO             | NO
+ RECAP                  | max_gain_profit     | integer                     |                          | YES         |                   | NO             | NO
+ RECAP                  | max_loss            | text                        |                          | YES         |                   | NO             | NO
+ RECAP                  | max_loss_profit     | integer                     |                          | YES         |                   | NO             | NO
+ RECAP                  | volume              | integer                     |                          | YES         |                   | NO             | NO
+ RECAP                  | trade_cnt           | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_HOLDING          | holding_id          | integer                     |                          | NO          |                   | YES            | NO
+ STOCK_HOLDING          | account_id          | bigint                      |                          | NO          |                   | NO             | NO
+ STOCK_HOLDING          | stock_info_id       | integer                     |                          | NO          |                   | NO             | NO
+ STOCK_HOLDING          | profit              | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_HOLDING          | profit_rate         | double precision            |                          | YES         |                   | NO             | NO
+ STOCK_HOLDING          | quantity            | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_HOLDING          | total_price         | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_INFO             | stock_info_id       | integer                     |                          | NO          |                   | YES            | NO
+ STOCK_INFO             | code                | text                        |                          | YES         |                   | NO             | NO
+ STOCK_INFO             | name                | text                        |                          | YES         |                   | NO             | NO
+ STOCK_INFO             | market              | text                        |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | lots_id             | integer                     |                          | NO          |                   | YES            | NO
+ STOCK_LOTS             | account_id          | bigint                      |                          | NO          |                   | NO             | NO
+ STOCK_LOTS             | stock_info_id       | integer                     |                          | NO          |                   | NO             | NO
+ STOCK_LOTS             | profit              | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | profit_rate         | double precision            |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | quantity            | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | remaining_quantity  | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | price               | integer                     |                          | YES         |                   | NO             | NO
+ STOCK_LOTS             | trade_at            | timestamp without time zone |                          | NO          |                   | NO             | NO
+ TICKS                  | stock_info_id       | integer                     |                          | NO          |                   | YES            | NO
+ TICKS                  | ts                  | timestamp with time zone    |                          | NO          |                   | YES            | NO
+ TICKS                  | open_price          | integer                     |                          | YES         |                   | NO             | NO
+ TICKS                  | high_price          | integer                     |                          | YES         |                   | NO             | NO
+ TICKS                  | low_price           | integer                     |                          | YES         |                   | NO             | NO
+ TICKS                  | close_price         | integer                     |                          | YES         |                   | NO             | NO
+ TICKS                  | volume              | bigint                      |                          | YES         |                   | NO             | NO
+ USERS                  | user_id             | bigint                      |                          | NO          |                   | YES            | NO
+ USERS                  | email               | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | social_login_id     | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | login_type          | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | nickname            | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | personality         | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | created_at          | timestamp without time zone |                          | YES         |                   | NO             | NO
+ USERS                  | profile_img         | text                        |                          | YES         |                   | NO             | NO
+ USERS                  | frame_id            | integer                     |                          | YES         |                   | NO             | NO
+ USERS                  | deleted_at          | timestamp without time zone |                          | YES         |                   | NO             | NO
+ USERS                  | is_ai               | boolean                     |                          | NO          | false             | NO             | NO
+ USERS                  | ai_id               | integer                     |                          | YES         |                   | NO             | NO
+ USER_PERSONALITY       | test_id             | integer                     |                          | NO          |                   | YES            | NO
+ USER_PERSONALITY       | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ USER_PERSONALITY       | personality         | text                        |                          | YES         |                   | NO             | NO
+ USER_PERSONALITY       | tested_at           | timestamp without time zone |                          | NO          |                   | NO             | NO
+ USER_TOKEN             | token_id            | integer                     |                          | NO          |                   | YES            | NO
+ USER_TOKEN             | user_id             | bigint                      |                          | NO          |                   | NO             | NO
+ USER_TOKEN             | refresh_token       | text                        |                          | YES         |                   | NO             | NO
+ USER_TOKEN             | expired_at          | timestamp without time zone |                          | YES         |                   | NO             | NO
+ USER_TOKEN             | created_at          | timestamp without time zone |                          | NO          |                   | NO             | NO
+(186 rows)
+

@@ -1,0 +1,54 @@
+Starting a Gradle Daemon, 1 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+The dependency resolution engine wasn't able to find a version of module androidx.lifecycle:lifecycle-runtime which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+The dependency resolution engine wasn't able to find a version of module androidx.core:core which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+The dependency resolution engine wasn't able to find a version of module androidx.annotation:annotation-experimental which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+The dependency resolution engine wasn't able to find a version of module androidx.annotation:annotation which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+The dependency resolution engine wasn't able to find a version of module androidx.lifecycle:lifecycle-viewmodel which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+The dependency resolution engine wasn't able to find a version of module androidx.core:core-ktx which satisfied all requirements because the graph wasn't stable enough. The highest version was selected in order to stabilize selection.
+Features available in a stable graph like version alignment are not guaranteed in this case.
+
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:processDebugGoogleServices UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:processDebugResources
+> Task :app:kspDebugKotlin UP-TO-DATE
+
+> Task :app:compileDebugKotlin FAILED
+e: file:///C:/Users/SSAFY/Desktop/project/test/S13P11D203/android/LAGO/app/src/main/java/com/lago/app/presentation/viewmodel/chart/ChartViewModel.kt:167:83 Unresolved reference 'DataConverter'.
+e: file:///C:/Users/SSAFY/Desktop/project/test/S13P11D203/android/LAGO/app/src/main/java/com/lago/app/presentation/viewmodel/chart/ChartViewModel.kt:169:51 Unresolved reference 'convertToTicks'.
+e: file:///C:/Users/SSAFY/Desktop/project/test/S13P11D203/android/LAGO/app/src/main/java/com/lago/app/presentation/viewmodel/chart/ChartViewModel.kt:170:32 Unresolved reference 'updateCandles'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 23s
+16 actionable tasks: 5 executed, 11 up-to-date

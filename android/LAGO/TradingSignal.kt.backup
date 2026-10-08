@@ -1,0 +1,77 @@
+package com.lago.app.domain.entity
+
+import com.tradingview.lightweightcharts.api.series.enums.SeriesMarkerPosition
+import com.tradingview.lightweightcharts.api.series.enums.SeriesMarkerShape
+import com.tradingview.lightweightcharts.api.series.models.SeriesMarker
+import com.tradingview.lightweightcharts.api.series.models.Time
+import com.tradingview.lightweightcharts.api.chart.models.color.IntColor
+import java.time.LocalDateTime
+
+/**
+ * 매수/매도 신호 데이터 엔티티
+ */
+data class TradingSignal(
+    val id: String,
+    val stockCode: String,
+    val signalType: SignalType,
+    val signalSource: SignalSource,
+    val timestamp: LocalDateTime,
+    val price: Double,
+    val message: String? = null
+)
+
+/**
+ * 신호 타입 (매수/매도)
+ */
+enum class SignalType {
+    BUY,    // 매수
+    SELL    // 매도
+}
+
+/**
+ * 신호 소스 (사용자/AI)
+ */
+enum class SignalSource(
+    val displayName: String,
+    val markerShape: SeriesMarkerShape,
+    val color: IntColor
+) {
+    USER("사용자", SeriesMarkerShape.ARROW_UP, IntColor(0xFF007BFF.toInt())),
+    AI_BLUE("AI 파랑", SeriesMarkerShape.CIRCLE, IntColor(0xFF007BFF.toInt())),
+    AI_GREEN("AI 초록", SeriesMarkerShape.CIRCLE, IntColor(0xFF28A745.toInt())),
+    AI_RED("AI 빨강", SeriesMarkerShape.CIRCLE, IntColor(0xFFDC3545.toInt())),
+    AI_YELLOW("AI 노랑", SeriesMarkerShape.CIRCLE, IntColor(0xFFFFC107.toInt()))
+}
+
+/**
+ * TradingSignal을 TradingView SeriesMarker로 변환하는 확장 함수
+ */
+fun TradingSignal.toSeriesMarker(): SeriesMarker {
+    return SeriesMarker(
+        time = Time.BusinessDay(
+            year = timestamp.year,
+            month = timestamp.monthValue,
+            day = timestamp.dayOfMonth
+        ),
+        position = when (signalType) {
+            SignalType.BUY -> SeriesMarkerPosition.BELOW_BAR
+            SignalType.SELL -> SeriesMarkerPosition.ABOVE_BAR
+        },
+        shape = when {
+            signalSource == SignalSource.USER && signalType == SignalType.BUY -> SeriesMarkerShape.ARROW_UP
+            signalSource == SignalSource.USER && signalType == SignalType.SELL -> SeriesMarkerShape.ARROW_DOWN
+            else -> signalSource.markerShape
+        },
+        color = signalSource.color,
+        id = id,
+        text = message ?: "${signalSource.displayName} ${if (signalType == SignalType.BUY) "매수" else "매도"}",
+        size = 1
+    )
+}
+
+/**
+ * TradingSignal 리스트를 SeriesMarker 리스트로 변환하는 확장 함수
+ */
+fun List<TradingSignal>.toSeriesMarkers(): List<SeriesMarker> {
+    return this.map { it.toSeriesMarker() }
+}

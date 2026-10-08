@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LAGO Native v5 Chart</title>
+    <script src="https://unpkg.com/lightweight-charts@5.0.8/dist/lightweight-charts.standalone.production.js"></script>
+    <style>
+        html, body, #chart { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            background: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart"></div>
+    
+    <script>
+        // LightWeight Charts v5 네이티브 API 직접 사용
+        let chart = null;
+        let mainSeries = null; // 캔들스틱
+        let volumeSeries = null; // 거래량
+        let sma5Series = null;
+        let sma20Series = null;
+        let rsiPane = null;
+        let rsiSeries = null;
+        
+        // 차트 초기화
+        function initChart() {
+            console.log('🚀 v5 네이티브 차트 초기화');
+            
+            const chartElement = document.getElementById('chart');
+            
+            // 메인 차트 생성
+            chart = LightweightCharts.createChart(chartElement, {
+                layout: { 
+                    background: { type: 'solid', color: '#ffffff' }, 
+                    textColor: '#333' 
+                },
+                width: chartElement.clientWidth,
+                height: chartElement.clientHeight,
+                timeScale: { 
+                    timeVisible: true, 
+                    secondsVisible: false,
+                    rightOffset: 2,
+                    rightBarStaysOnScroll: true,
+                },
+                rightPriceScale: { borderVisible: false },
+                grid: {
+                    vertLines: { color: '#f0f0f0' },
+                    horzLines: { color: '#f0f0f0' },
+                },
+            });
+            
+            // 1. 메인 캔들스틱 시리즈
+            mainSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
+                upColor: '#26a69a',
+                downColor: '#ef5350',
+                borderVisible: false,
+                wickUpColor: '#26a69a',
+                wickDownColor: '#ef5350',
+                priceFormat: { type: 'price', precision: 0, minMove: 1 },
+            });
+            
+            // 2. 거래량 히스토그램 (메인 패널)
+            volumeSeries = chart.addSeries(LightweightCharts.HistogramSeries, {
+                priceFormat: { type: 'volume' },
+                priceScaleId: '', // 별도 스케일
+            });
+            
+            // 3. SMA5 라인 (메인 패널 오버레이)
+            sma5Series = chart.addSeries(LightweightCharts.LineSeries, {
+                color: '#2196F3',
+                lineWidth: 2,
+                title: 'SMA5',
+            });
+            
+            // 4. SMA20 라인 (메인 패널 오버레이)
+            sma20Series = chart.addSeries(LightweightCharts.LineSeries, {
+                color: '#FF9800',
+                lineWidth: 2,
+                title: 'SMA20',
+            });
+            
+            // 리사이즈 처리
+            window.addEventListener('resize', () => {
+                chart.applyOptions({ 
+                    width: chartElement.clientWidth,
+                    height: chartElement.clientHeight 
+                });
+            });
+            
+            console.log('✅ v5 네이티브 차트 초기화 완료');
+            
+            // Android에 준비 완료 알림
+            if (window.NativeChartBridge) {
+                window.NativeChartBridge.onChartReady();
+            }
+        }
+        
+        // ========== 간단한 v5 네이티브 API ==========
+        
+        // 캔들 데이터 설정 (UTCTimestamp 초 단위)
+        window.setCandleData = function(candlesJson) {
+            try {
+                const candles = typeof candlesJson === 'string' ? JSON.parse(candlesJson) : candlesJson;
+                console.log('📊 캔들 데이터 설정:', candles.length, '개');
+                
+                if (mainSeries && candles.length > 0) {
+                    mainSeries.setData(candles);
+                    chart.timeScale().fitContent();
+                    console.log('✅ 캔들 setData 완료');
+                }
+            } catch (e) {
+                console.error('❌ 캔들 데이터 설정 실패:', e);
+            }
+        };
+        
+        // 거래량 데이터 설정
+        window.setVolumeData = function(volumesJson) {
+            try {
+                const volumes = typeof volumesJson === 'string' ? JSON.parse(volumesJson) : volumesJson;
+                console.log('📊 거래량 데이터 설정:', volumes.length, '개');
+                
+                if (volumeSeries && volumes.length > 0) {
+                    volumeSeries.setData(volumes);
+                    console.log('✅ 거래량 setData 완료');
+                }
+            } catch (e) {
+                console.error('❌ 거래량 데이터 설정 실패:', e);
+            }
+        };
+        
+        // SMA5 데이터 설정
+        window.setSMA5Data = function(smaJson) {
+            try {
+                const smaData = typeof smaJson === 'string' ? JSON.parse(smaJson) : smaJson;
+                console.log('📈 SMA5 데이터 설정:', smaData.length, '개');
+                
+                if (sma5Series && smaData.length > 0) {
+                    sma5Series.setData(smaData);
+                    console.log('✅ SMA5 setData 완료');
+                }
+            } catch (e) {
+                console.error('❌ SMA5 데이터 설정 실패:', e);
+            }
+        };
+        
+        // SMA20 데이터 설정
+        window.setSMA20Data = function(smaJson) {
+            try {
+                const smaData = typeof smaJson === 'string' ? JSON.parse(smaJson) : smaJson;
+                console.log('📈 SMA20 데이터 설정:', smaData.length, '개');
+                
+                if (sma20Series && smaData.length > 0) {
+                    sma20Series.setData(smaData);
+                    console.log('✅ SMA20 setData 완료');
+                }
+            } catch (e) {
+                console.error('❌ SMA20 데이터 설정 실패:', e);
+            }
+        };
+        
+        // RSI 패널 생성 및 데이터 설정
+        window.setRSIData = function(rsiJson) {
+            try {
+                const rsiData = typeof rsiJson === 'string' ? JSON.parse(rsiJson) : rsiJson;
+                console.log('📊 RSI 데이터 설정:', rsiData.length, '개');
+                
+                // RSI 패널이 없으면 생성
+                if (!rsiPane) {
+                    rsiPane = chart.addPane(true); // 새 패널 추가
+                    rsiSeries = rsiPane.addSeries(LightweightCharts.LineSeries, {
+                        color: '#9C27B0',
+                        lineWidth: 2,
+                        title: 'RSI',
+                    });
+                    console.log('📊 RSI 패널 생성 완료');
+                }
+                
+                if (rsiSeries && rsiData.length > 0) {
+                    rsiSeries.setData(rsiData);
+                    console.log('✅ RSI setData 완료');
+                }
+            } catch (e) {
+                console.error('❌ RSI 데이터 설정 실패:', e);
+            }
+        };
+        
+        // 실시간 업데이트
+        window.updateCandle = function(candleJson) {
+            try {
+                const candle = typeof candleJson === 'string' ? JSON.parse(candleJson) : candleJson;
+                if (mainSeries) {
+                    mainSeries.update(candle);
+                }
+            } catch (e) {
+                console.error('❌ 캔들 업데이트 실패:', e);
+            }
+        };
+        
+        window.updateVolume = function(volumeJson) {
+            try {
+                const volume = typeof volumeJson === 'string' ? JSON.parse(volumeJson) : volumeJson;
+                if (volumeSeries) {
+                    volumeSeries.update(volume);
+                }
+            } catch (e) {
+                console.error('❌ 거래량 업데이트 실패:', e);
+            }
+        };
+        
+        // 지표 토글 (show/hide)
+        window.toggleSMA5 = function(visible) {
+            if (sma5Series) {
+                sma5Series.applyOptions({ visible: visible });
+                console.log('🔄 SMA5 토글:', visible);
+            }
+        };
+        
+        window.toggleSMA20 = function(visible) {
+            if (sma20Series) {
+                sma20Series.applyOptions({ visible: visible });
+                console.log('🔄 SMA20 토글:', visible);
+            }
+        };
+        
+        window.toggleVolume = function(visible) {
+            if (volumeSeries) {
+                volumeSeries.applyOptions({ visible: visible });
+                console.log('🔄 거래량 토글:', visible);
+            }
+        };
+        
+        window.toggleRSI = function(visible) {
+            if (rsiSeries) {
+                rsiSeries.applyOptions({ visible: visible });
+                console.log('🔄 RSI 토글:', visible);
+            }
+        };
+        
+        // 모든 데이터 한번에 설정 (초기 로딩용)
+        window.setAllData = function(candlesJson, volumesJson, sma5Json, sma20Json, rsiJson) {
+            console.log('🚀 모든 데이터 한번에 설정');
+            
+            if (candlesJson) window.setCandleData(candlesJson);
+            if (volumesJson) window.setVolumeData(volumesJson);
+            if (sma5Json) window.setSMA5Data(sma5Json);
+            if (sma20Json) window.setSMA20Data(sma20Json);
+            if (rsiJson) window.setRSIData(rsiJson);
+            
+            console.log('✅ 모든 데이터 설정 완료');
+        };
+        
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', initChart);
+        
+        // 디버깅용
+        window.getChart = () => chart;
+        window.getMainSeries = () => mainSeries;
+        
+    </script>
+</body>
+</html>

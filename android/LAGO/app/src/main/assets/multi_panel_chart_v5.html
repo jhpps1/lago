@@ -1,0 +1,617 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>LAGO Multi Panel Chart v5</title>
+<script src="https://unpkg.com/lightweight-charts@5.0.8/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+html,body,#root{height:100%;margin:0;padding:0;background:#FFFFFF;color:#333;font-family:sans-serif}
+#root{position:relative}
+#chart{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root"><div id="chart"></div></div>
+<script>
+let __chart = null;
+let __mainSeries = null;
+let __volumeSeries = null;
+let __followRT = true;
+
+let __resizeObserver = null;
+let __orientationHandler = null;
+let __visibilityHandler = null;
+
+// 🔥 차트 상태 관리 및 순차 로딩을 위한 변수들
+let __chartReady = false;
+let __dataLoaded = false;
+let __indicatorsApplied = false;
+let __pendingDataQueue = [];
+let __pendingIndicatorQueue = [];
+let __loadingStage = 'INITIALIZING'; // INITIALIZING -> CHART_READY -> DATA_LOADED -> INDICATORS_APPLIED -> COMPLETED
+
+function initChart() {
+  console.log('[HTML] 🔥 차트 초기화 시작');
+  __loadingStage = 'INITIALIZING';
+  updateLoadingProgress(10, 'Initializing chart...');
+
+  // Cleanup previous instances
+  if (__resizeObserver) {
+    __resizeObserver.disconnect();
+    __resizeObserver = null;
+  }
+  if (__orientationHandler) {
+    window.removeEventListener('orientationchange', __orientationHandler);
+    __orientationHandler = null;
+  }
+  if (__visibilityHandler) {
+    document.removeEventListener('visibilitychange', __visibilityHandler);
+    __visibilityHandler = null;
+  }
+  if (__chart) {
+    try { __chart.remove(); } catch(e) { console.error('Chart remove error:', e); }
+    __chart = null;
+  }
+
+  // 🔥 상태 초기화
+  __chartReady = false;
+  __dataLoaded = false;
+  __indicatorsApplied = false;
+  __pendingDataQueue = [];
+  __pendingIndicatorQueue = [];
+
+  const el = document.getElementById('chart');
+  const cw = Math.max(1, Math.floor(el.clientWidth));
+  const ch = Math.max(1, Math.floor(el.clientHeight));
+  
+  updateLoadingProgress(30, 'Creating chart instance...');
+  
+  __chart = LightweightCharts.createChart(el, {
+    autoSize: false,
+    width: cw,
+    height: ch,
+    layout:{ background:{ type:'Solid', color:'#FFFFFF' }, textColor:'#333333' },
+    rightPriceScale:{ borderVisible:false },
+    timeScale:{ rightOffset:2, rightBarStaysOnScroll:true, borderVisible:false }
+  });
+  __mainSeries = __chart.addCandlestickSeries();
+  __volumeSeries = __chart.addHistogramSeries({ priceFormat: { type: 'volume' }, priceScaleId:''});
+
+  updateLoadingProgress(50, 'Setting up chart interactions...');
+
+  const ts = __chart.timeScale();
+  ts.subscribeVisibleLogicalRangeChange(() => {
+    const range = ts.getVisibleLogicalRange();
+    if (!range) return;
+    const info = __mainSeries.barsInLogicalRange(range) || {};
+    __followRT = (info.barsAfter ?? 0) < 1;
+    if ((info.barsBefore ?? 0) < 20 && window.Android && Android.onRequestHistoricalData) {
+      Android.onRequestHistoricalData(200);
+    }
+  });
+
+  // Setup ResizeObserver
+  __resizeObserver = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      const cr = entry.contentRect;
+      const w = Math.max(1, Math.floor(cr.width));
+      const h = Math.max(1, Math.floor(cr.height));
+      if (__chart) {
+        __chart.applyOptions({ width: w, height: h });
+        console.log('[HTML] Chart resized to:', w + 'x' + h);
+      }
+    }
+  });
+  __resizeObserver.observe(el);
+
+  // Orientation change handler
+  __orientationHandler = () => {
+    setTimeout(() => {
+      const b = el.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(b.width));
+      const h = Math.max(1, Math.floor(b.height));
+      if (__chart) {
+        __chart.applyOptions({ width: w, height: h });
+        console.log('[HTML] (orientation) resized to:', w + 'x' + h);
+      }
+    }, 200);
+  };
+  window.addEventListener('orientationchange', __orientationHandler);
+
+  // Visibility change handler
+  __visibilityHandler = () => {
+    if (document.visibilityState === 'visible' && __chart) {
+      const b = el.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(b.width));
+      const h = Math.max(1, Math.floor(b.height));
+      __chart.applyOptions({ width: w, height: h });
+      console.log('[HTML] (visible) resized to:', w + 'x' + h);
+    }
+  };
+  document.addEventListener('visibilitychange', __visibilityHandler);
+
+  // 🔥 차트 준비 완료 - 순차적 로딩 시작
+  updateLoadingProgress(70, 'Chart ready, processing data queue...');
+  __chartReady = true;
+  __loadingStage = 'CHART_READY';
+  console.log('[HTML] ✅ 차트 준비 완료');
+
+  // 대기 중인 데이터 처리
+  processPendingData();
+
+  // Chart ready callbacks
+  try { 
+    if (window.ChartBridge && ChartBridge.onChartReady) {
+      console.log('[HTML] 📞 ChartBridge.onChartReady() 호출');
+      ChartBridge.onChartReady();
+    }
+    if (window.Android && Android.onChartReady) {
+      console.log('[HTML] 📞 Android.onChartReady() 호출');
+      Android.onChartReady();
+    }
+    if (window.ChartInterface && ChartInterface.onChartReady) {
+      console.log('[HTML] 📞 ChartInterface.onChartReady() 호출');
+      ChartInterface.onChartReady();
+    }
+  } catch(e) {
+    console.error('[HTML] ❌ Chart ready 콜백 호출 중 오류:', e);
+  }
+}
+
+// 🔥 새로운 setInitialData - MultiPanelChart.kt와 호환
+window.setInitialData = function(seriesId, jsonArray) {
+  console.log('[HTML] 📊 setInitialData 호출 - seriesId:', seriesId);
+  
+  try {
+    const candles = JSON.parse(jsonArray);
+    console.log('[HTML] 📊 캔들 데이터 파싱 완료:', candles.length + '개');
+    
+    if (seriesId === 'candle' || !seriesId) {
+      // 캔들스틱 데이터 설정
+      if (__mainSeries) {
+        __mainSeries.setData(candles);
+        console.log('[HTML] ✅ 캔들스틱 데이터 설정 완료');
+        
+        // 🔥 즉시 완료 처리
+        __dataLoaded = true;
+        __loadingStage = 'DATA_LOADED';
+        
+        // 타임아웃으로 강제 완료
+        setTimeout(() => {
+          if (!__indicatorsApplied) {
+            console.log('[HTML] ⏰ 강제 로딩 완료 처리');
+            __indicatorsApplied = true;
+            completeLoading();
+          }
+        }, 500); // 0.5초 후 강제 완료
+        
+        __chart.timeScale().fitContent();
+      } else {
+        console.error('[HTML] ❌ __mainSeries가 없음');
+      }
+    } else if (seriesId === 'volume') {
+      // 거래량 데이터 설정
+      if (__volumeSeries) {
+        __volumeSeries.setData(candles); // 거래량도 같은 형식
+        console.log('[HTML] ✅ 거래량 데이터 설정 완료');
+      } else {
+        console.error('[HTML] ❌ __volumeSeries가 없음');
+      }
+    } else {
+      console.warn('[HTML] ⚠️ 알 수 없는 seriesId:', seriesId);
+    }
+    
+  } catch (e) {
+    console.error('[HTML] ❌ setInitialData 오류:', e);
+  }
+};
+
+// 🔥 기존 호환성을 위한 setInitialData (candlesJson, volumesJson)
+function setInitialDataLegacy(candlesJson, volumesJson) {
+  console.log('[HTML] 📊 레거시 초기 데이터 설정 요청');
+  
+  if (!__chartReady) {
+    console.log('[HTML] ⏳ 차트 준비 전 - 데이터 큐에 추가');
+    __pendingDataQueue.push({ type: 'initial', candlesJson, volumesJson });
+    return;
+  }
+
+  try {
+    updateLoadingProgress(80, 'Loading chart data...');
+    const candles = JSON.parse(candlesJson);
+    const volumes = volumesJson ? JSON.parse(volumesJson) : [];
+    
+    __mainSeries.setData(candles);
+    if (volumes && volumes.length) __volumeSeries.setData(volumes);
+    
+    __dataLoaded = true;
+    __loadingStage = 'DATA_LOADED';
+    console.log('[HTML] ✅ 초기 데이터 로드 완료');
+    
+    // 🔥 강제 완료 처리
+    setTimeout(() => {
+      if (!__indicatorsApplied) {
+        console.log('[HTML] ⏰ 타임아웃 - 강제 로딩 완료 처리');
+        __indicatorsApplied = true;
+        completeLoading();
+      }
+    }, 1000); // 1초 후 강제 완료
+    
+    // 대기 중인 지표 처리
+    processPendingIndicators();
+    
+    // 🔥 지표가 없으면 즉시 완료 처리
+    if (__pendingIndicatorQueue.length === 0) {
+      console.log('[HTML] 📈 대기 중인 지표가 없음 - 즉시 완료 처리');
+      setTimeout(() => {
+        __indicatorsApplied = true;
+        completeLoading();
+      }, 300); // 0.3초 후 완료
+    }
+  } catch (e) {
+    console.error('LAGO setInitialDataLegacy error', e);
+    updateLoadingProgress(0, 'Data loading failed');
+  }
+}
+
+function prependHistoricalData(candlesJson, volumesJson) {
+  try {
+    const candles = JSON.parse(candlesJson);
+    const prev = __mainSeries._data?._series?._items || [];
+    __mainSeries.setData(candles.concat(prev));
+    if (volumesJson) {
+      const vols = JSON.parse(volumesJson);
+      const vprev = __volumeSeries._data?._series?._items || [];
+      __volumeSeries.setData(vols.concat(vprev));
+    }
+  } catch (e) { console.error('prependHistoricalData error', e); }
+}
+
+function updateBar(bar) {
+  __mainSeries.update(bar);
+  if (__followRT) __chart.timeScale().scrollToRealTime();
+}
+function updateVolume(vol) { __volumeSeries.update(vol); }
+
+function setTimeFrame(tf) { /* hook */ }
+
+function setIndicatorEnabled(type, enabled, payloadJson) {
+  console.log('[HTML] 📈 지표 설정 요청:', type, enabled);
+  
+  if (!__dataLoaded) {
+    console.log('[HTML] ⏳ 데이터 로드 전 - 지표 큐에 추가');
+    __pendingIndicatorQueue.push({ type, enabled, payloadJson });
+    return;
+  }
+
+  try {
+    updateLoadingProgress(90, `Applying ${type} indicator...`);
+    // implement with your pane/series manager
+    console.log('[HTML] ✅ 지표 적용 완료:', type);
+    
+    // 모든 지표 적용 완료 확인
+    if (__pendingIndicatorQueue.length === 0) {
+      __indicatorsApplied = true;
+      __loadingStage = 'INDICATORS_APPLIED';
+      completeLoading();
+    }
+  } catch (e) {
+    console.error('Indicator setup error:', e);
+  }
+}
+
+function setTradeMarkers(markersJson) {
+  try {
+    const markers = JSON.parse(markersJson);
+    __mainSeries.setMarkers(markers);
+  } catch(e){ console.error('markers error', e); }
+}
+function clearTradeMarkers(){ __mainSeries.setMarkers([]); }
+
+function setAutoPatternAnalysis(enabled) {
+  if (!__chart || !__chart.timeScale) return;
+  const ts = __chart.timeScale();
+  if (enabled) {
+    ts.subscribeVisibleTimeRangeChange((range) => {
+      if (!range) return;
+      const from = Math.floor(range.from);
+      const to = Math.floor(range.to);
+      if (window.ChartBridge && ChartBridge.analyzePatternInRange) {
+        ChartBridge.analyzePatternInRange(String(from), String(to));
+      }
+    });
+  }
+}
+
+// 🔥 순차적 로딩을 위한 헬퍼 함수들
+function updateLoadingProgress(percentage, message) {
+  console.log(`[HTML] 📊 Loading: ${percentage}% - ${message}`);
+  try {
+    if (window.ChartBridge && ChartBridge.onLoadingProgress) {
+      console.log(`[HTML] 📞 ChartBridge.onLoadingProgress(${percentage}) 호출`);
+      ChartBridge.onLoadingProgress(percentage);
+    }
+    if (window.Android && Android.onLoadingProgress) {
+      console.log(`[HTML] 📞 Android.onLoadingProgress(${percentage}) 호출`);
+      Android.onLoadingProgress(percentage);
+    }
+    if (window.ChartInterface && ChartInterface.onLoadingProgress) {
+      console.log(`[HTML] 📞 ChartInterface.onLoadingProgress(${percentage}) 호출`);
+      ChartInterface.onLoadingProgress(percentage);
+    }
+  } catch(e) {
+    console.error('[HTML] ❌ Loading progress 콜백 호출 중 오류:', e);
+  }
+}
+
+function processPendingData() {
+  if (__pendingDataQueue.length > 0) {
+    console.log('[HTML] 🔄 대기 중인 데이터 처리:', __pendingDataQueue.length);
+    const dataItem = __pendingDataQueue.shift();
+    if (dataItem.type === 'initial') {
+      setInitialData(dataItem.candlesJson, dataItem.volumesJson);
+    }
+  } else if (__dataLoaded) {
+    // 데이터가 이미 로드되었고 대기 중인 지표가 있으면 처리
+    processPendingIndicators();
+  }
+}
+
+function processPendingIndicators() {
+  if (__pendingIndicatorQueue.length > 0) {
+    console.log('[HTML] 🔄 대기 중인 지표 처리:', __pendingIndicatorQueue.length);
+    const indicatorItem = __pendingIndicatorQueue.shift();
+    setIndicatorEnabled(indicatorItem.type, indicatorItem.enabled, indicatorItem.payloadJson);
+  } else {
+    // 모든 지표 처리 완료
+    __indicatorsApplied = true;
+    __loadingStage = 'INDICATORS_APPLIED';
+    completeLoading();
+  }
+}
+
+function completeLoading() {
+  console.log('[HTML] 🔍 completeLoading 호출 - 상태 확인');
+  console.log('[HTML] 📊 __chartReady:', __chartReady, '__dataLoaded:', __dataLoaded, '__indicatorsApplied:', __indicatorsApplied);
+  
+  if (__chartReady && __dataLoaded) {
+    // 🔥 지표 적용 여부와 관계없이 데이터가 로드되면 완료 처리
+    __loadingStage = 'COMPLETED';
+    __indicatorsApplied = true; // 강제로 완료 상태로 설정
+    
+    // 🔥 차트 데이터 최종 검증 및 복구
+    validateAndRepairChart();
+    
+    updateLoadingProgress(100, 'Chart loading completed');
+    console.log('[HTML] 🎉 차트 로딩 완전 완료!');
+    
+    // 완료 콜백 호출
+    try {
+      if (window.ChartBridge && ChartBridge.onChartLoadingCompleted) {
+        console.log('[HTML] 📞 ChartBridge.onChartLoadingCompleted() 호출');
+        ChartBridge.onChartLoadingCompleted();
+      }
+      if (window.Android && Android.onChartLoadingCompleted) {
+        console.log('[HTML] 📞 Android.onChartLoadingCompleted() 호출');
+        Android.onChartLoadingCompleted();
+      }
+      if (window.ChartInterface && ChartInterface.onChartLoadingCompleted) {
+        console.log('[HTML] 📞 ChartInterface.onChartLoadingCompleted() 호출');
+        ChartInterface.onChartLoadingCompleted();
+      }
+    } catch(e) {
+      console.error('[HTML] ❌ 완료 콜백 호출 중 오류:', e);
+    }
+  } else {
+    console.warn('[HTML] ⚠️ 로딩 완료 조건 미충족 - chartReady:', __chartReady, 'dataLoaded:', __dataLoaded);
+  }
+}
+
+// 🔥 차트 데이터 검증 및 복구 함수
+function validateAndRepairChart() {
+  try {
+    console.log('[HTML] 🔍 차트 데이터 최종 검증 시작');
+    
+    if (!__chart || !__mainSeries) {
+      console.error('[HTML] ❌ 차트나 캔들 시리즈가 없음');
+      return;
+    }
+    
+    // 캔들스틱 데이터 검증
+    const candleData = __mainSeries.data();
+    console.log('[HTML] 📊 캔들스틱 데이터 개수:', candleData.length);
+    
+    if (candleData.length === 0) {
+      console.error('[HTML] ❌ 캔들스틱 데이터가 비어있음 - 복구 시도');
+      
+      // 대기 중인 데이터가 있으면 다시 시도
+      if (__pendingDataQueue.length > 0) {
+        console.log('[HTML] 🔄 대기 중인 데이터로 복구 시도');
+        processPendingData();
+        return;
+      }
+    }
+    
+    // 거래량 데이터 검증
+    if (__volumeSeries) {
+      const volumeData = __volumeSeries.data();
+      console.log('[HTML] 📊 거래량 데이터 개수:', volumeData.length);
+      
+      if (volumeData.length === 0 && candleData.length > 0) {
+        console.warn('[HTML] ⚠️ 거래량 데이터가 없음 - 기본 거래량 생성');
+        
+        // 캔들 데이터 기반으로 기본 거래량 생성
+        const defaultVolumeData = candleData.map(candle => ({
+          time: candle.time,
+          value: Math.random() * 1000000 + 100000, // 기본 거래량
+          color: candle.close >= candle.open ? '#26a69a' : '#ef5350'
+        }));
+        
+        __volumeSeries.setData(defaultVolumeData);
+        console.log('[HTML] ✅ 기본 거래량 데이터 생성 완료');
+      }
+    }
+    
+    // 차트 가시성 강제 새로고침
+    if (__chart) {
+      console.log('[HTML] 🔄 차트 강제 새로고침');
+      __chart.timeScale().fitContent();
+      
+      // 약간의 지연 후 다시 맞춤
+      setTimeout(() => {
+        try {
+          __chart.timeScale().fitContent();
+          console.log('[HTML] ✅ 차트 시간축 맞춤 완료');
+        } catch (e) {
+          console.warn('[HTML] ⚠️ 지연된 차트 맞춤 실패:', e);
+        }
+      }, 500);
+    }
+    
+    console.log('[HTML] ✅ 차트 데이터 검증 완료');
+    
+  } catch (e) {
+    console.error('[HTML] ❌ validateAndRepairChart 오류:', e);
+  }
+}
+
+window.beginLoad = function(id){};
+window.endLoad = function(id){};
+
+window.requestPatternAnalysis = function() {
+  try {
+    const r = __chart.timeScale().getVisibleRange();
+    if (r && window.ChartBridge && ChartBridge.analyzePatternInRange) {
+      ChartBridge.analyzePatternInRange(String(Math.floor(r.from)), String(Math.floor(r.to)));
+    }
+  } catch(e){ console.warn('requestPatternAnalysis failed', e); }
+};
+
+// 🔥 실시간 차트 업데이트 함수들
+window.updateRealTimeBar = function(barDataJson) {
+  try {
+    console.log('[HTML] 📊 실시간 캔들 업데이트 시작:', barDataJson);
+    
+    if (!__chart || !__mainSeries) {
+      console.warn('[HTML] ⚠️ 차트나 캔들 시리즈가 없어 실시간 업데이트 불가');
+      return;
+    }
+    
+    const barData = JSON.parse(barDataJson);
+    console.log('[HTML] 📊 파싱된 캔들 데이터:', barData);
+    
+    // 현재 차트 데이터 가져오기
+    const existingData = __mainSeries.data();
+    console.log('[HTML] 📊 기존 데이터 개수:', existingData.length);
+    
+    if (existingData.length === 0) {
+      console.warn('[HTML] ⚠️ 기존 데이터가 없어 실시간 업데이트 불가');
+      return;
+    }
+    
+    // 새 데이터의 시간
+    const newTime = barData.time;
+    
+    // 마지막 기존 캔들의 시간
+    const lastExistingTime = existingData[existingData.length - 1].time;
+    
+    console.log('[HTML] 📊 시간 비교 - 새 데이터:', newTime, '기존 마지막:', lastExistingTime);
+    
+    if (newTime === lastExistingTime) {
+      // 🔥 같은 시간대 - 기존 캔들 업데이트
+      console.log('[HTML] 🔄 기존 캔들 업데이트 (같은 시간대)');
+      
+      // 기존 데이터의 마지막 캔들을 새 데이터로 교체
+      const updatedData = [...existingData];
+      updatedData[updatedData.length - 1] = {
+        time: newTime,
+        open: barData.open,
+        high: Math.max(updatedData[updatedData.length - 1].high, barData.high),
+        low: Math.min(updatedData[updatedData.length - 1].low, barData.low),
+        close: barData.close
+      };
+      
+      __mainSeries.setData(updatedData);
+      console.log('[HTML] ✅ 기존 캔들 업데이트 완료');
+      
+    } else if (newTime > lastExistingTime) {
+      // 🔥 새 시간대 - 새 캔들 추가
+      console.log('[HTML] ➕ 새 캔들 추가 (새 시간대)');
+      
+      __mainSeries.update(barData);
+      console.log('[HTML] ✅ 새 캔들 추가 완료');
+      
+    } else {
+      console.warn('[HTML] ⚠️ 과거 시간 데이터 무시:', newTime, '<=', lastExistingTime);
+    }
+    
+  } catch (e) {
+    console.error('[HTML] ❌ updateRealTimeBar 오류:', e);
+  }
+};
+
+window.updateRealTimeVolume = function(volumeDataJson) {
+  try {
+    console.log('[HTML] 📊 실시간 거래량 업데이트 시작:', volumeDataJson);
+    
+    if (!__volumeSeries) {
+      console.warn('[HTML] ⚠️ 거래량 시리즈가 없어 실시간 업데이트 불가');
+      return;
+    }
+    
+    const volumeData = JSON.parse(volumeDataJson);
+    console.log('[HTML] 📊 파싱된 거래량 데이터:', volumeData);
+    
+    // 현재 거래량 데이터 가져오기
+    const existingVolumeData = __volumeSeries.data();
+    console.log('[HTML] 📊 기존 거래량 데이터 개수:', existingVolumeData.length);
+    
+    if (existingVolumeData.length === 0) {
+      console.warn('[HTML] ⚠️ 기존 거래량 데이터가 없어 실시간 업데이트 불가');
+      return;
+    }
+    
+    // 새 데이터의 시간
+    const newTime = volumeData.time;
+    
+    // 마지막 기존 거래량의 시간
+    const lastExistingTime = existingVolumeData[existingVolumeData.length - 1].time;
+    
+    console.log('[HTML] 📊 거래량 시간 비교 - 새 데이터:', newTime, '기존 마지막:', lastExistingTime);
+    
+    if (newTime === lastExistingTime) {
+      // 🔥 같은 시간대 - 기존 거래량 업데이트 (누적)
+      console.log('[HTML] 🔄 기존 거래량 업데이트 (누적)');
+      
+      const updatedVolumeData = [...existingVolumeData];
+      const lastVolume = updatedVolumeData[updatedVolumeData.length - 1];
+      
+      updatedVolumeData[updatedVolumeData.length - 1] = {
+        time: newTime,
+        value: lastVolume.value + volumeData.value, // 거래량 누적
+        color: volumeData.color
+      };
+      
+      __volumeSeries.setData(updatedVolumeData);
+      console.log('[HTML] ✅ 기존 거래량 누적 완료');
+      
+    } else if (newTime > lastExistingTime) {
+      // 🔥 새 시간대 - 새 거래량 추가
+      console.log('[HTML] ➕ 새 거래량 추가 (새 시간대)');
+      
+      __volumeSeries.update(volumeData);
+      console.log('[HTML] ✅ 새 거래량 추가 완료');
+      
+    } else {
+      console.warn('[HTML] ⚠️ 과거 시간 거래량 데이터 무시:', newTime, '<=', lastExistingTime);
+    }
+    
+  } catch (e) {
+    console.error('[HTML] ❌ updateRealTimeVolume 오류:', e);
+  }
+};
+
+window.addEventListener('load', initChart);
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+.git
+android
+images
+**/.gradle
+**/build
+BE/out
+BE/.idea
+*.md
+exec

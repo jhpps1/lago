@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LAGO Simple Chart v5</title>
+    <script src="https://unpkg.com/lightweight-charts@5.0.8/dist/lightweight-charts.standalone.production.js"></script>
+    <style>
+        html, body, #chart { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            background: #FFFFFF;
+        }
+        #chart { 
+            position: relative; 
+        }
+    </style>
+</head>
+<body>
+    <div id="chart"></div>
+    
+    <script>
+        // LightWeight Charts v5.0.8 기준 간단한 차트 시스템
+        let chart = null;
+        let mainSeries = null;
+        let volumeSeries = null;
+        let indicators = {}; // 지표 시리즈 저장
+        
+        // 차트 초기화
+        function initChart() {
+            console.log('🚀 차트 초기화 시작');
+            
+            const chartElement = document.getElementById('chart');
+            
+            // 차트 생성
+            chart = LightweightCharts.createChart(chartElement, {
+                layout: {
+                    background: { type: 'solid', color: '#FFFFFF' },
+                    textColor: '#333333',
+                },
+                grid: {
+                    vertLines: { color: '#f0f0f0' },
+                    horzLines: { color: '#f0f0f0' },
+                },
+                rightPriceScale: {
+                    borderVisible: false,
+                },
+                timeScale: {
+                    borderVisible: false,
+                    rightOffset: 2,
+                    rightBarStaysOnScroll: true,
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+            });
+            
+            // 메인 캔들스틱 시리즈
+            mainSeries = chart.addCandlestickSeries({
+                upColor: '#26a69a',
+                downColor: '#ef5350',
+                borderVisible: false,
+                wickUpColor: '#26a69a',
+                wickDownColor: '#ef5350',
+            });
+            
+            // 거래량 시리즈 (별도 패널)
+            volumeSeries = chart.addHistogramSeries({
+                color: '#26a69a',
+                priceFormat: {
+                    type: 'volume',
+                },
+                priceScaleId: '', // 별도 스케일
+            });
+            
+            // 리사이즈 처리
+            window.addEventListener('resize', () => {
+                chart.applyOptions({ 
+                    width: chartElement.clientWidth,
+                    height: chartElement.clientHeight 
+                });
+            });
+            
+            console.log('✅ 차트 초기화 완료');
+            
+            // Android에 준비 완료 알림
+            if (window.SimpleChartBridge) {
+                window.SimpleChartBridge.onChartReady();
+            }
+        }
+        
+        // 메인 캔들 데이터 설정
+        window.setMainData = function(candlesData) {
+            try {
+                const candles = typeof candlesData === 'string' ? JSON.parse(candlesData) : candlesData;
+                console.log('📊 메인 데이터 설정:', candles.length, '개');
+                
+                if (mainSeries && candles.length > 0) {
+                    mainSeries.setData(candles);
+                    console.log('✅ 캔들 데이터 설정 완료');
+                }
+            } catch (e) {
+                console.error('❌ 캔들 데이터 설정 실패:', e);
+            }
+        };
+        
+        // 거래량 데이터 설정
+        window.setVolumeData = function(volumeData) {
+            try {
+                const volumes = typeof volumeData === 'string' ? JSON.parse(volumeData) : volumeData;
+                console.log('📊 거래량 데이터 설정:', volumes.length, '개');
+                
+                if (volumeSeries && volumes.length > 0) {
+                    volumeSeries.setData(volumes);
+                    console.log('✅ 거래량 데이터 설정 완료');
+                }
+            } catch (e) {
+                console.error('❌ 거래량 데이터 설정 실패:', e);
+            }
+        };
+        
+        // 지표 데이터 설정
+        window.setIndicatorData = function(indicatorType, lineData) {
+            try {
+                const data = typeof lineData === 'string' ? JSON.parse(lineData) : lineData;
+                console.log('📈 지표 데이터 설정:', indicatorType, data.length, '개');
+                
+                if (!indicators[indicatorType]) {
+                    // 지표 시리즈 생성
+                    if (indicatorType === 'sma5') {
+                        indicators[indicatorType] = chart.addLineSeries({
+                            color: '#2196F3',
+                            lineWidth: 2,
+                            title: 'SMA5',
+                        });
+                    } else if (indicatorType === 'sma20') {
+                        indicators[indicatorType] = chart.addLineSeries({
+                            color: '#FF9800',
+                            lineWidth: 2,
+                            title: 'SMA20',
+                        });
+                    } else if (indicatorType === 'rsi') {
+                        // RSI는 별도 패널에 생성
+                        indicators[indicatorType] = chart.addLineSeries({
+                            color: '#9C27B0',
+                            lineWidth: 2,
+                            title: 'RSI',
+                            priceScaleId: 'rsi',
+                        });
+                    }
+                }
+                
+                if (indicators[indicatorType] && data.length > 0) {
+                    indicators[indicatorType].setData(data);
+                    console.log('✅', indicatorType, '데이터 설정 완료');
+                }
+                
+            } catch (e) {
+                console.error('❌ 지표 데이터 설정 실패:', indicatorType, e);
+            }
+        };
+        
+        // 실시간 캔들 업데이트
+        window.updateCandle = function(candleData) {
+            try {
+                const candle = typeof candleData === 'string' ? JSON.parse(candleData) : candleData;
+                if (mainSeries) {
+                    mainSeries.update(candle);
+                }
+            } catch (e) {
+                console.error('❌ 캔들 업데이트 실패:', e);
+            }
+        };
+        
+        // 실시간 거래량 업데이트
+        window.updateVolume = function(volumeData) {
+            try {
+                const volume = typeof volumeData === 'string' ? JSON.parse(volumeData) : volumeData;
+                if (volumeSeries) {
+                    volumeSeries.update(volume);
+                }
+            } catch (e) {
+                console.error('❌ 거래량 업데이트 실패:', e);
+            }
+        };
+        
+        // 지표 토글
+        window.toggleIndicator = function(indicatorType, enabled) {
+            try {
+                console.log('🔄 지표 토글:', indicatorType, enabled);
+                
+                if (indicators[indicatorType]) {
+                    if (enabled) {
+                        chart.addSeries(indicators[indicatorType]);
+                    } else {
+                        chart.removeSeries(indicators[indicatorType]);
+                    }
+                }
+            } catch (e) {
+                console.error('❌ 지표 토글 실패:', indicatorType, e);
+            }
+        };
+        
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', initChart);
+        
+        // 디버깅용
+        window.getChart = () => chart;
+        window.getMainSeries = () => mainSeries;
+        window.getVolumeSeries = () => volumeSeries;
+        window.getIndicators = () => indicators;
+        
+    </script>
+</body>
+</html>

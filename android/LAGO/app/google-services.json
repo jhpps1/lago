@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "641435048942",
+    "project_id": "lago-c8844",
+    "storage_bucket": "lago-c8844.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641435048942:android:4315f4e827df77539c8cff",
+        "android_client_info": {
+          "package_name": "com.lago.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641435048942-9sod4cmdha6cd3vco7fp2af8b03f7o21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lago.app",
+            "certificate_hash": "1ede451d61f5b7b4c09f2ca4eaf7eb34fc66e60b"
+          }
+        },
+        {
+          "client_id": "641435048942-tn0f6sriv3a1sf4nakcospbqa09udlch.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lago.app",
+            "certificate_hash": "bf2a434085c0887e9664508d1bddbe6909902016"
+          }
+        },
+        {
+          "client_id": "641435048942-va9dhns7ghn2404k4gmsar6h02batoeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9sF-oSc9m3G9CgcS7RIJL8b7FYKZbUrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641435048942-va9dhns7ghn2404k4gmsar6h02batoeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

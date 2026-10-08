@@ -1,0 +1,180 @@
+# IDE
+*.DS_Store
+
+# Docker/DB/Redis 볼륨(실제 데이터)
+/dbdata/
+/redisdata/
+dbdata/
+redisdata/
+BE/dbdata/
+BE/redisdata/
+
+# 기타 임시/캐시
+*.tmp
+*.temp
+*.cache
+
+# node, frontend 등 추가시
+node_modules/
+
+# Java/Spring Boot 빌드 파일
+/build/
+/BE/build/
+/BE/out/
+*.iml
+*.class
+*.log
+HELP.md
+
+# Gradle
+.gradle/
+BE/.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# OS/에디터 불필요 파일
+Thumbs.db
+*.bak
+*.swp
+*.swo
+*~
+
+# Firebase 서비스 계정 키
+firebaseServiceAccountKey.json
+
+# 환경변수/시크릿/설정 파일
+.env
+.env.*
+*.properties
+application-*.properties
+application-*.yml
+application-*.yaml
+!application.properties.example
+!application.yml.example
+
+# Python 캐시/빌드 파일 (FinBERT 서비스)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch/ML 모델 캐시
+.cache/
+models/
+*.pth
+*.pkl
+*.pt
+*.bin
+*.onnx
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Python 가상환경
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+pip-selfcheck.json
+
+# 테스트 파일들
+test_*.py
+*_test.py
+test_*.json
+*_test.json
+*.test.py
+*.test.json
+.pytest_cache/
+pytest_cache/
+test/
+tests/
+!**/src/test/
+
+# 환경변수/시크릿 (템플릿 제외)
+.env
+.env.local
+.env.production
+.env.development
+!.env.example
+
+# Docker Compose Override (EC2 배포용)
+docker-compose.override.yml
+!docker-compose.override.yml
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Gemini
+.gemini/
+
+# Progress tracking
+PROGRESS.md
+RECOVERY_PLAN.md
+RABBITMQ_PERF.md
+INFRA_ANALYSIS.md
+
+# properties
+.properties
+*.properties
+
+# Claude 로컬 권한 파일에는 붙여 넣은 키가 들어갈 수 있다
+.claude/
+
+# 빌드에 필요한 설정. 위의 *.properties 규칙은 팀 저장소 것을 유지한다.
+!gradle/wrapper/gradle-wrapper.properties
+!BE/gradle/wrapper/gradle-wrapper.properties
+!BE/src/main/resources/application.properties
+!BE/src/main/resources/application-dev.properties
+!BE/src/main/resources/application-prod.properties
