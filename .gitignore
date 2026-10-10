@@ -172,6 +172,9 @@ INFRA_ANALYSIS.md
 # Claude 로컬 권한 파일에는 붙여 넣은 키가 들어갈 수 있다
 .claude/
 
+# 면접, 포트폴리오 정리 메모. 로컬 파일에만 둔다.
+SECURITY.md
+
 # 빌드에 필요한 설정. 위의 *.properties 규칙은 팀 저장소 것을 유지한다.
 !gradle/wrapper/gradle-wrapper.properties
 !BE/gradle/wrapper/gradle-wrapper.properties
