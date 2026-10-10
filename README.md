@@ -1,176 +1,370 @@
-# 라고할때
+<div align="center">
 
-주식 투자 초보자를 위한 모의투자 학습 앱이다. SSAFY 13기 공통 프로젝트이고, 기간은 2025.07.07부터 2025.08.18까지다.
-
-알기 쉬운 용어로 학습하고, 실제 주가를 붙인 모의투자로 실전 경험을 쌓는 것이 목표다.
-
-[영상 포트폴리오](https://youtu.be/wsXnRQZ3P1M)
+# 라고할때 - 모의투자 학습 서비스
+주식투자 초보자를 위한 모의투자 학습 어플리케이션
 
 <img src="images/LAGO_thumbnail.JPG" alt="썸네일" width="80%"/>
 
-## 목차
+</div>
 
-- [화면](#화면)
-- [기술 특징](#기술-특징)
-- [기술 스택](#기술-스택)
-- [패키지 구조](#패키지-구조)
-- [산출물](#산출물)
-- [팀](#팀)
+# 개요
+- **서비스명**: 라고할때
+- **프로젝트 기간:** 2025. 07.07 ~ 2025.08.18
+- **SSAFY 13기 공통 프로젝트**
+- **목표:** 주식 투자 초보자를 위해 알기 쉬운 용어로 직관적이게 표현한 학습 기능과 실제 주가 정보를 연동한 모의 투자 기능으로 실전 경험을 쌓을 수 있는 어플리케이션
 
-## 화면
+[▶️ 영상 포트폴리오 보러가기](https://youtu.be/wsXnRQZ3P1M)
 
-### 메인
+## 주요 기능 시연
 
-<img src="images/main/agree_conditions.jpg" alt="약관동의" height="280"/> <img src="images/main/personality_result.png" alt="성향검사" height="280"/>
+### 메인 화면
 
-<img src="images/main/home_top.jpg" alt="홈 상단" height="280"/> <img src="images/main/home_bottom.png" alt="홈 하단" height="280"/> <img src="images/main/transaction_history.jpg" alt="거래내역" height="280"/>
+<img src="images/main/agree_conditions.jpg" alt="약관동의" height="400"/><img src="images/main/personality_result.png" alt="성향검사사" height="400"/>
+<br>
+<br>
+<img src="images/main/home_top.jpg" alt="홈화면2" height="400"/><img src="images/main/home_bottom.png" alt="홈화면1" height="400"/><img src="images/main/transaction_history.jpg" alt="거래내역역" height="400"/>
 
 ### 모의투자
 
-<img src="images/trade/list_1.png" alt="종목 리스트 1" height="280"/> <img src="images/trade/list_2.jpg" alt="종목 리스트 2" height="280"/>
-
-<img src="images/trade/chart_1.png" alt="차트 1" height="280"/> <img src="images/trade/chart_2.png" alt="차트 2" height="280"/> <img src="images/trade/chart_3.jpg" alt="차트 3" height="280"/>
-
-<img src="images/trade/trade_1.jpg" alt="주문 1" height="280"/> <img src="images/trade/trade_2.jpg" alt="주문 2" height="280"/>
+<img src="images/trade/list_1.png" alt="리스트1" height="400"/><img src="images/trade/list_2.jpg" alt="리스트2" height="400"/>
+<br>
+<br>
+<img src="images/trade/chart_1.png" alt="차트1" height="400"/><img src="images/trade/chart_2.png" alt="차트2" height="400"/><img src="images/trade/chart_3.jpg" alt="차트3" height="400"/>
+<br>
+<br>
+<img src="images/trade/trade_1.jpg" alt="거래1" height="400"/><img src="images/trade/trade_2.jpg" alt="거래2" height="400"/>
 
 ### 차트 패턴 분석
 
-<img src="images/analyze/analyze_1.jpg" alt="패턴 분석 1" height="280"/> <img src="images/analyze/analyze_2.png" alt="패턴 분석 2" height="280"/>
+<img src="images/analyze/analyze_1.jpg" alt="분석1" height="400"/><img src="images/analyze/analyze_2.png" alt="분석2" height="400"/>
 
 ### 학습
 
-<img src="images/study/study_home.png" alt="학습 홈" height="280"/> <img src="images/study/chart_learn.png" alt="차트 패턴 학습" height="280"/> <img src="images/study/terms.png" alt="단어장" height="280"/>
-
-<img src="images/study/quiz_daily.jpg" alt="데일리 퀴즈" height="280"/> <img src="images/study/quiz_result_daily.jpg" alt="데일리 퀴즈 결과" height="280"/>
-
-<img src="images/study/quiz_random.jpg" alt="랜덤 퀴즈" height="280"/> <img src="images/study/quiz_result_random.jpg" alt="랜덤 퀴즈 결과" height="280"/>
+<img src="images/study/study_home.png" alt="학습홈" height="400"/><img src="images/study/chart_learn.png" alt="차트패턴학습" height="400"/><img src="images/study/terms.png" alt="단어장" height="400"/>
+<br>
+<br>
+<img src="images/study/quiz_daily.jpg" alt="데일리퀴즈" height="400"/><img src="images/study/quiz_result_daily.jpg" alt="데일리퀴즈결과" height="400"/>
+<br>
+<br>
+<img src="images/study/quiz_random.jpg" alt="랜덤퀴즈" height="400"/><img src="images/study/quiz_result_random.jpg" alt="랜덤퀴즈결과" height="400"/>
 
 ### 역사 챌린지
 
-<img src="images/challenge/challenge_home.png" alt="역사 챌린지" height="280"/>
+<img src="images/challenge/challenge_home.png" alt="역사챌린지홈홈" height="400"/>
 
 ### 뉴스
 
-<img src="images/news/news1.jpg" alt="뉴스 목록" height="280"/> <img src="images/news/news2.jpg" alt="뉴스" height="280"/> <img src="images/news/news3_detail.jpg" alt="뉴스 상세" height="280"/>
+<img src="images/news/news1.jpg" alt="뉴스1" height="400"/><img src="images/news/news2.jpg" alt="뉴스2" height="400"/><img src="images/news/news3_detail.jpg" alt="뉴스상세화면면" height="400"/>
 
-### 성향별 매매봇
+### 성향별 매매봇 
 
-<img src="images/trade_bot/trade_bot1.png" alt="매매봇 1" height="280"/> <img src="images/trade_bot/trade_bot2.jpg" alt="매매봇 2" height="280"/>
+<img src="images/trade_bot/trade_bot1.png" alt="매매봇1" height="400"/><img src="images/trade_bot/trade_bot2.jpg" alt="매매봇2" height="400"/>
 
 ### 마이페이지
 
-<img src="images/mypage/mypage1.jpg" alt="마이페이지 1" height="280"/> <img src="images/mypage/mypage2.jpg" alt="마이페이지 2" height="280"/> <img src="images/mypage/mypage3_ranking.jpg" alt="랭킹" height="280"/>
+<img src="images/mypage/mypage1.jpg" alt="마이페이지1" height="400"/><img src="images/mypage/mypage2.jpg" alt="마이페이지2" height="400"/><img src="images/mypage/mypage3_ranking.jpg" alt="마이페이지3" height="400"/>
 
-## 기술 특징
+## 기술적 특징
+### 1. 웹소켓 구독 기능을 사용한 부하 방지
 
-### 웹소켓 구독
+- 한국 투자 증권 API를 이용해 실제 주가 정보를 연동하고 웹소켓을 통해 사용자 화면에 지연 없이 전달 → 한 번에 많은 양의 데이터를 실시간으로 전달하게 되면 네트워크와 렌더링에 부하 발생
+- 웹소켓 구독 기능을 활용해 보이는 종목은 구독하고 스크롤 되어 화면 밖으로 사라진 종목은 구독 해제하는 방식으로 렌더링 최적화 → 자원을 효율적으로 사용하고 매끄러운 사용 흐름 제공
 
-한국투자증권 API로 실제 주가를 받고, 웹소켓으로 화면에 보낸다. 화면에 보이는 종목만 구독하고, 스크롤로 사라진 종목은 구독을 끊는다.
+### 2. PostgreSQL + TimescaleDB
 
-### PostgreSQL과 TimescaleDB
+- 시세 테이블 `ticks`는 `schema_setup.sql`에서 TimescaleDB 하이퍼테이블이다. 기준 열은 `ts`이고, `stock_info_id`로 2분할한다.
+- 연속 집계는 일(`ticks_day`), 주(`ticks_week`), 월(`ticks_month`)이다. 분 단위 집계 뷰는 이 스키마에 없다.
+- 압축 정책과 삽입 속도 측정값은 이 저장소에 없다.
+    
 
-`ticks`는 `schema_setup.sql`의 하이퍼테이블이다. 기준 열은 `ts`이고, `stock_info_id`로 2분할한다. 연속 집계는 일(`ticks_day`), 주(`ticks_week`), 월(`ticks_month`)이다. 분 단위 집계 뷰는 이 스키마에 없다. 압축 정책과 삽입 속도 측정값은 이 저장소에 없다.
+### 3. 차트 패턴 분석
 
-### 차트 패턴 분석
+- 단순 가격 비교가 아닌 선형회귀와 추세선이라는 통계적 지표를 확인하여 추세선을 그리고 기울기와 결정 계수를 활용해 차트 패턴을 탐지 → 사용자가 상승/하락 추세를 직관적으로 파악할 수 있음
 
-가격만 비교하지 않는다. 선형회귀로 추세선을 그리고, 기울기와 결정 계수로 차트 패턴을 찾는다.
+### 4. 데일리 퀴즈
 
-### 데일리 퀴즈
+- 매일 랜덤한 시간에 데일리 퀴즈 알람을 사용자에게 전송
 
-매일 랜덤한 시간에 데일리 퀴즈 알람을 보낸다.
+### 5. 뉴스
 
-### 뉴스
+- FinBERT는 별도 Flask 컨테이너다. Spring이 HTTP로 호출한다. compose에서 Flask는 호스트 5000, Spring은 8081이다.
+- 기사는 구글 RSS에서 주소를 찾고, 기사 주소 해독은 selectolax를 쓴다. 언론사 본문을 읽은 뒤 감정 점수를 -1.0에서 1.0으로 맞춘다.
+- Selenium 코드는 있다. `RENDER_JS`가 켜져 있으면 JS 렌더링을 시도한다. FinBERT 이미지에는 Chrome과 chromedriver가 없어서 그 경로는 동작하지 않는다.
 
-FinBERT는 별도 Flask 컨테이너다. Spring이 HTTP로 호출한다. compose에서 Flask는 호스트 5000, Spring은 8081이다.
+### 6. 성향별 매매봇
 
-기사는 구글 RSS에서 주소를 찾고, 기사 주소 해독은 selectolax를 쓴다. 언론사 본문을 읽은 뒤 감정 점수를 -1.0에서 1.0으로 맞춘다.
+- 매매로직
+    - 뉴스 감정분석: 구글 RSS + FinBERT
+        - 구글 뉴스에서 기사 주소를 찾아 언론사 본문을 읽고, 점수는 -1.0 ~ 1.0으로 맞춘다
+    - 기술적 분석: 다중 지표 통합 분석
+        - RSI, MACD, 볼린저밴드, 이동평균선, 골든/데드 크로스
+        - Java 21 Virtual Thread 활용 병렬 계산으로 고성능 처리
+- 점수는 뉴스 감정, 기술 점수, 등락률을 합친다. 기술 점수에는 RSI, MACD, 볼린저밴드, 이동평균, 골든/데드 크로스가 들어 있다.
+    - 화끈이: `(뉴스×1.3 + 기술 + 등락률) / 3`. 매수 0.3 이상, 매도 -0.2 미만
+    - 적극이: `(뉴스 + 기술×1.2 + 등락률) / 3`. 매수 0.1 이상, 매도 -0.3 미만
+    - 균형이: `(뉴스 + 기술 + 등락률) / 3 × 0.8`. 매수 0.5 이상, 매도 -0.5 미만
+    - 조심이: 뉴스가 음수면 1.5배, 아니면 0.7배. 매수 0.7 이상, 매도 -0.3 미만
+- 매분 자동 실행
+    - Spring 스케줄러로 매분마다 AI 봇을 실행한다
+    - 종목은 삼성전자(005930), 수량은 1주다
+    - 가격은 Redis `realtime:stock:{코드}`의 `closePrice`다. 없으면 `ticks` 종가다. 둘 다 없으면 주문하지 않는다
+    - 주문은 Redis `orders-stream`에 넣고, 컨슈머가 기존 주문 처리로 넘긴다
 
-Selenium 코드는 있다. `RENDER_JS`가 켜져 있으면 JS 렌더링을 시도한다. FinBERT 이미지에는 Chrome과 chromedriver가 없어서 그 경로는 동작하지 않는다.
+# 기술 스택
 
-### 성향별 매매봇
+<!-- LAGO 기술 스택 (핵심 기술만) -->
+<!-- LAGO 기술 스택 -->
+<table>
+  <tr>
+    <th>분류</th>
+    <th>기술 스택</th>
+  </tr>
 
-점수는 뉴스 감정, 기술 점수, 등락률을 합친다. 기술 점수에는 RSI, MACD, 볼린저밴드, 이동평균, 골든 크로스, 데드 크로스가 들어 있다. 기술 지표 계산은 Java 21 가상 스레드로 병렬 처리한다.
+  <!-- 모바일(Android) -->
+  <tr>
+    <td><b>모바일(Android)</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=androidstudio&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Kotlin-0095D5?style=flat&logo=kotlin&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat&logo=jetpackcompose&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Dagger%20Hilt-5A29E4?style=flat&logo=dagger&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Room-4285F4?style=flat&logo=android&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Coroutines-1E90FF?style=flat&logo=kotlin&logoColor=white"/>
+      <img src="https://img.shields.io/badge/TradingView%20Charting%20Library-2962FF?style=flat&logo=tradingview&logoColor=white"/>
+    </td>
+  </tr>
 
-| 성향 | 점수 | 매수 | 매도 |
-| --- | --- | --- | --- |
-| 화끈이 | (뉴스×1.3 + 기술 + 등락률) / 3 | 0.3 이상 | -0.2 미만 |
-| 적극이 | (뉴스 + 기술×1.2 + 등락률) / 3 | 0.1 이상 | -0.3 미만 |
-| 균형이 | (뉴스 + 기술 + 등락률) / 3 × 0.8 | 0.5 이상 | -0.5 미만 |
-| 조심이 | 뉴스가 음수면 1.5배, 아니면 0.7배 | 0.7 이상 | -0.3 미만 |
+  <!-- 백엔드(Spring) -->
+  <tr>
+    <td><b>백엔드</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Java%2021-ED8B00?style=flat&logo=openjdk&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat&logo=springboot&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/>
+      <img src="https://img.shields.io/badge/WebFlux-6DB33F?style=flat"/>
+      <img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=flat"/>
+      <img src="https://img.shields.io/badge/OAuth2-000000?style=flat"/>
+      <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
+    </td>
+  </tr>
 
-Spring 스케줄러가 매분 AI 봇을 실행한다. 종목은 삼성전자(005930), 수량은 1주다. 가격은 Redis `realtime:stock:{코드}`의 `closePrice`다. 없으면 `ticks` 종가다. 둘 다 없으면 주문하지 않는다. 주문은 Redis `orders-stream`에 넣고, 컨슈머가 기존 주문 처리로 넘긴다.
+  <!-- 네트워크 & API -->
+  <tr>
+    <td><b>네트워크·API</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/한국투자증권%20API-003F7C?style=flat"/>
+      <img src="https://img.shields.io/badge/Retrofit-3A3A3A?style=flat"/>
+      <img src="https://img.shields.io/badge/OkHttp-3A3A3A?style=flat"/>
+      <img src="https://img.shields.io/badge/WebSocket-555?style=flat"/>
+      <img src="https://img.shields.io/badge/OpenAPI%203-85EA2D?style=flat&logo=swagger&logoColor=black"/>
+    </td>
+  </tr>
 
-## 기술 스택
+  <!-- 데이터베이스 -->
+  <tr>
+    <td><b>데이터베이스</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/PostgreSQL%2014-316192?style=flat&logo=postgresql&logoColor=white"/>
+      <img src="https://img.shields.io/badge/TimescaleDB-FDB515?style=flat&logo=timescale&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Redis%207.2-DC382D?style=flat&logo=redis&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Firebase%20Storage-FFCA28?style=flat&logo=firebase&logoColor=black"/>
+    </td>
+  </tr>
 
-| 분류 | 기술 |
-| --- | --- |
-| 모바일 | Android Studio, Kotlin, Jetpack Compose, Dagger Hilt, Room, Coroutines, TradingView Charting Library |
-| 백엔드 | Java 21, Spring Boot, Spring Security, WebFlux, Spring Data JPA, OAuth2, JWT |
-| 네트워크 | 한국투자증권 API, Retrofit, OkHttp, WebSocket, OpenAPI 3 |
-| 데이터 | PostgreSQL 14, TimescaleDB, Redis 7.2, Firebase Storage |
-| AI | Flask, OpenAI, PyTorch, Transformers, ko-FinBERT, Pandas |
-| 인프라 | Docker, Docker Compose, AWS EC2, Ubuntu, Spring Actuator |
-| 협업 | GitLab, Jira, Notion, Mattermost |
+  <!-- AI/데이터 -->
+  <tr>
+    <td><b>AI·데이터</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white"/>
+      <img src="https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white"/>
+      <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Transformers-FFD21E?style=flat&logo=huggingface&logoColor=black"/>
+      <img src="https://img.shields.io/badge/ko--FinBERT-111?style=flat"/>
+      <img src="https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white"/>
+    </td>
+  </tr>
 
-## 패키지 구조
+  <!-- 인프라 -->
+  <tr>
+    <td><b>인프라·DevOps</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white"/>
+      <img src="https://img.shields.io/badge/AWS%20EC2-FF9900?style=flat&logo=amazonec2&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Spring%20Actuator-6DB33F?style=flat"/>
+    </td>
+  </tr>
 
-### Android
+  <!-- 협업도구 -->
+  <tr>
+    <td><b>협업도구</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/GitLab-FC6D26?style=flat&logo=gitlab&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Jira-0052CC?style=flat&logo=jira&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=notion&logoColor=white"/>
+      <img src="https://img.shields.io/badge/Mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
+    </td>
+  </tr>
+</table>
 
-```text
-com.lago.app/
-├── data/
-│   ├── cache/                 # 차트, 관심종목, 실시간 데이터
-│   ├── local/                 # Room DAO, Entity, SharedPreferences
-│   ├── remote/                # API, DTO, WebSocket
-│   ├── repository/
-│   ├── scheduler/
-│   └── service/
-├── di/
-├── domain/                    # entity, repository, usecase
-├── fcm/
-└── presentation/
-    ├── ui/                    # chart, home, login, news, study 등
-    └── viewmodel/
-```
-
-### 백엔드
-
-```text
-BE/src/main/java/com/example/LAGO/
-├── LagoApplication.java
-├── ai/                        # FinBERT 감정분석, 매매 전략
-├── config/                    # Security, WebSocket, Redis, KIS
-├── controller/
-├── domain/
-├── dto/
-├── repository/
-├── realtime/                  # KIS WebSocket, Redis Stream, TimescaleDB
-├── service/                   # 자동매매봇, 기술적분석, 계좌
-├── kis/
-├── scheduler/                 # 데일리 퀴즈, 뉴스 수집, 자산 업데이트
-├── utils/
-├── exception/
-├── converter/
-└── constants/
-```
-
-아키텍처 그림은 [images/LAGO_architecture.png](images/LAGO_architecture.png)에 있다.
-
+# 시스템 아키텍처
 ![시스템 아키텍처](images/LAGO_architecture.png)
 
-## 산출물
+## Android 패키지 구조
+```markdown
+com.lago.app/
+├── data/                          # 데이터 레이어
+│   ├── cache/                     # 캐시 관리 (차트, 관심종목, 실시간 데이터)
+│   ├── local/                     # 로컬 데이터
+│   │   ├── dao/                   # Room DAO
+│   │   ├── entity/                # Room Entity
+│   │   └── prefs/                 # SharedPreferences
+│   ├── remote/                    # 원격 데이터
+│   │   ├── api/                   # API 서비스 인터페이스
+│   │   ├── dto/                   # 데이터 전송 객체
+│   │   └── websocket/             # WebSocket 연결
+│   ├── repository/                # Repository 구현체
+│   ├── scheduler/                 # 스케줄러
+│   └── service/                   # 데이터 서비스
+│
+├── di/                           # 의존성 주입 모듈
+│
+├── domain/                       # 도메인 레이어
+│   ├── entity/                   # 도메인 엔티티
+│   ├── repository/               # Repository 인터페이스
+│   └── usecase/                  # 비즈니스 로직 UseCase
+│
+├── fcm/                         # Firebase 메시징
+│
+└── presentation/                 # 프레젠테이션 레이어
+    ├── ui/                       # UI 컴포넌트
+    │   ├── chart/                # 차트 관련 UI
+    │   │   ├── state/            # 차트 상태 관리
+    │   │   └── v5/               # 차트 v5 구현 (TradingView 커스터마이징)
+    │   ├── components/           # 공통 UI 컴포넌트
+    │   ├── historychallenge/     # 역사 챌린지 화면
+    │   ├── home/                 # 홈 화면
+    │   ├── login/                # 로그인 화면
+    │   ├── news/                 # 뉴스 화면
+    │   ├── personalitytest/      # 성향 테스트 화면
+    │   └── study/                # 학습 관련 화면
+    │       └── Screen/           # 학습 세부 화면
+    └── viewmodel/               # ViewModel
+        └── history/             # 거래 이력 관련 ViewModel
+```
 
-- 포팅 매뉴얼은 `exec` 폴더에 있다.
+## BackEnd 패키지 구조
+```markdown
+  BE/src/main/java/com/example/LAGO/
+  ├── LagoApplication.java                    # Spring Boot 메인 클래스
+  │
+  ├── ai/                                    # AI 서비스 모듈
+  │   ├── sentiment/                         # FinBERT 감정분석
+  │   │   └── dto/
+  │   └── strategy/                          # AI 매매 전략
+  │       └── dto/
+  │
+  ├── config/                               # 설정 클래스
+  │   # Spring Security, WebSocket, Redis, KIS API 등
+  │
+  ├── controller/                           # REST API 컨트롤러
+  │   # 인증, 주식매매, AI봇, 계좌, 차트, 뉴스, 포트폴리오 등
+  │
+  ├── domain/                               # JPA 엔티티
+  │   ├── converter/                        # 엔티티 변환기
+  │   # 사용자, 계좌, 주식, 매매, AI전략, 뉴스, 시계열 데이터 등
+  │
+  ├── dto/                                  # 데이터 전송 객체
+  │   ├── request/                          # 요청 DTO
+  │   └── response/                         # 응답 DTO
+  │
+  ├── repository/                           # JPA 리포지토리
+  │   # 각 도메인별 데이터 접근 계층
+  │
+  ├── realtime/                            # 실시간 데이터 처리
+  │   └── dto/                             # 실시간 데이터 DTO
+  │   # KIS WebSocket, Redis Stream, 분봉처리, TimescaleDB 등
+  │
+  ├── service/                             # 비즈니스 로직
+  │   # 자동매매봇, 기술적분석, 매매, 계좌, 포트폴리오 등
+  │
+  ├── kis/                                 # 한국투자증권 연동
+  │   # KIS 인증, WebSocket, 실시간 연결 등
+  │
+  ├── scheduler/                           # 스케줄링 작업
+  │   # 데일리 퀴즈, 뉴스 수집, 자산 업데이트 등
+  │
+  ├── utils/                               # 유틸리티
+  │   # 기술적분석 계산, 매매 관련 유틸 등
+  │
+  ├── exception/                           # 예외 처리
+  │   # 글로벌 예외 핸들러, 커스텀 예외 등
+  │
+  ├── converter/                           # 데이터 변환
+  │   # 날짜/시간, 문자열 변환기 등
+  │
+  └── constants/                           # 상수 정의
+```
+
+## 프로젝트 산출물 및 메뉴얼
+
+- 포팅 메뉴얼 (exec 폴더 참고)
 - [기능 명세서](https://www.notion.so/237085cabd3480fea27ce09b3c59625c?pvs=21)
-- [와이어프레임](https://www.figma.com/design/utXuqPzMOWMkrvwPFUTlTF/%EB%9D%BC%EA%B3%A0%ED%95%A0%EB%95%8C-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=ge4MRh3gd1kZeJVe-1)
+- [와이어 프레임](https://www.figma.com/design/utXuqPzMOWMkrvwPFUTlTF/%EB%9D%BC%EA%B3%A0%ED%95%A0%EB%95%8C-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=ge4MRh3gd1kZeJVe-1)
 - [API 명세서](https://www.notion.so/API-22a085cabd348039bc81edc6ec3eeeec?pvs=21)
 - [ERD](https://dbdiagram.io/d/689d9e061d75ee360a90baed)
 - [시퀀스 다이어그램](https://www.notion.so/22a085cabd3480678fd8cd9a8e29707a?pvs=21)
 - [간트 차트](https://docs.google.com/spreadsheets/d/1wQ9IBqwJeYietFdrB4bGjVusZWbprBePGl_xuRKNgzI/edit?usp=sharing)
 
-## 팀
+## 팀원 소개
 
-| 김수진 | 김해민 | 박경찬 | 박승균 | 박준형 | 최혜림 |
-| --- | --- | --- | --- | --- | --- |
-| <img src="images/kimsujin.jpg" width="120"/> | <img src="이미지URL" width="120"/> | <img src="images/parkgyungchan.jpg" width="120"/> | <img src="![image.png](attachment:8f5857f5-07fd-4c86-9e3d-5b16c406b554:image.png)" width="120"/> | <img src="이미지URL" width="120"/> | <img src="이미지URL" width="120"/> |
-| 팀장, PM. 중간/최종 발표, PPT, UI/UX, 기능 명세서, 간트 차트. Android는 마이페이지, 포트폴리오, 랭킹, 뉴스. BE는 계좌 조회, 관심 뉴스. | 캐릭터 디자인. BE는 실시간 주가, 차트 조회, 관심 종목, Entity. | 기획, PL, 시퀀스 다이어그램. Android는 투자 메인, 모의투자, 역사적 챌린지. BE는 주식 거래, 실시간 뉴스. | Android는 메인, 학습, 포트폴리오, 랭킹, FCM. BE는 단어장, 퀴즈, 소셜 로그인. AI는 뉴스 감정 분석. | 서버 환경, 서버 최적화, DB 설계, 성향별 매매봇 API. | 문서, API 설계와 명세서. BE는 차트 패턴 분석, 역사적 챌린지. |
+<table>
+  <tr>
+    <th>김수진</th>
+    <th>김해민</th>
+    <th>박경찬</th>
+    <th>박승균</th>
+    <th>박준형</th>
+    <th>최혜림</th>
+  </tr>
+  <tr>
+    <td><img src="images/kimsujin.jpg" width="120"/></td>
+    <td><img src="이미지URL" width="120"/></td>
+    <td><img src="images/parkgyungchan.jpg" width="120"/></td>
+    <td><img src="![image.png](attachment:8f5857f5-07fd-4c86-9e3d-5b16c406b554:image.png)" width="120"/></td>
+    <td><img src="이미지URL" width="120"/></td>
+    <td><img src="이미지URL" width="120"/></td>
+  </tr>
+  <tr>
+    <td>
+      - 팀장, PM<br>- 중간/최종 발표<br>- PPT 제작<br>- UI/UX 디자인<br>- 기능 명세서 작성<br>- 간트 차트 작성<br><br>
+      <b>[Android]</b><br>- 마이페이지 화면<br>- 포트폴리오 화면<br>- 랭킹 화면<br>- 뉴스 화면<br><br>
+      <b>[BE]</b><br>- 계좌 조회 API<br>- 관심 뉴스 API
+    </td>
+    <td>
+      - 캐릭터 디자인<br><br>
+      <b>[BE]</b><br>- 실시간 주가 API<br>- 차트 조회 API<br>- 관심 종목 추가 API<br>- Entity 생성
+    </td>
+    <td>
+      - 프로젝트 기획 및 PL <br>- 시퀀스 다이어그램 작성<br><br>
+      <b>[Android]</b><br>- 투자 메인 화면<br>- 모의투자 화면<br>- 역사적 챌린지 화면<br><br>
+      <b>[BE]</b><br>- 주식 거래 API<br>- 실시간 뉴스 처리 API
+    </td>
+    <td>
+      <b>[Android]</b><br>- 메인화면<br>- 학습 화면<br>- 포트폴리오 화면<br>- 랭킹<br>- FCM 알림<br><br>
+      <b>[Backend]</b><br>- 단어장/퀴즈<br>- 소셜 로그인<br><br>
+      <b>[AI]</b><br>- 뉴스 감정 분석
+    </td>
+    <td>
+      <b>[Infra]</b><br>- 서버환경 구축<br>- 서버 최적화<br><br>
+      <b>[DB]</b><br>- DB 설계 및 최적화<br><br>
+      <b>[BE]</b><br>- 성향별 매매봇 API
+    </td>
+    <td>
+      - 문서 작성<br>- API 설계 및 명세서 작성<br><br>
+      <b>[BE]</b><br>- 차트 패턴 분석 API<br>- 역사적 챌린지 API
+    </td>
+  </tr>
+</table>
+
