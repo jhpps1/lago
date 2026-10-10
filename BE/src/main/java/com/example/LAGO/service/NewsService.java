@@ -534,12 +534,28 @@ public class NewsService {
                 .title(title)
                 .content(content)
                 .summary(getStringArrayAsString(newsData, "summary_lines"))
-                .sentiment(getStringValue(newsData, "label"))
+                .sentiment(normalizeSentiment(newsData))
                 .publishedAt(parsePublishedDate(newsData))
                 .type(getStringValue(newsData, "symbol"))
                 .build();
 
         return news;
+    }
+
+    /**
+     * FinBERT score는 -100~100이다. 매매에 쓰는 값은 -1~1로 줄여 저장한다.
+     */
+    private String normalizeSentiment(Map<String, Object> newsData) {
+        Object score = newsData.get("score");
+        if (score instanceof Number number) {
+            double value = number.doubleValue();
+            if (Math.abs(value) > 1.0) {
+                value = value / 100.0;
+            }
+            value = Math.max(-1.0, Math.min(1.0, value));
+            return String.format(java.util.Locale.US, "%.4f", value);
+        }
+        return getStringValue(newsData, "label");
     }
 
     /**
