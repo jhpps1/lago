@@ -17,6 +17,9 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# googlenewsdecoder는 selectolax Modest 파서를 쓴다. 1.0은 그 파서를 없애서 기사 주소 해독이 실패한다.
+RUN pip install --no-cache-dir "selectolax>=0.3.21,<1"
+
 # Copy application code
 COPY . .
 

@@ -240,7 +240,7 @@ public final class TradingConstants {
     
     // ===== 계좌 타입 상수 =====
     /**
-     * 모의투자 계좌 타입 (정수값) - AI 봇도 이 타입 사용
+     * 모의투자 계좌 타입 (정수값). AI 봇 계좌는 ACCOUNT_TYPE_AI_BOT 이다.
      */
     public static final Integer ACCOUNT_TYPE_MOCK_TRADING = 0;
     

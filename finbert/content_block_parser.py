@@ -74,6 +74,7 @@ class ContentBlockParser:
         # common selectors (order matters)
         self._CONTENT_SELECTORS: List[str] = [
             "article",
+            "#CmAdContent",              # YTN
             "#newsct_article",           # Naver News
             ".newsct_article",
             ".article-content",
@@ -106,10 +107,19 @@ class ContentBlockParser:
         # 3) still short? try news_crawler fallback (title+content)
         if len(text) < MIN_ARTICLE_LEN and HAS_NEWS_CRAWLER:
             try:
-                title2, content2 = extract_news_content_with_title(url)  # type: ignore
+                extracted = extract_news_content_with_title(url)  # type: ignore
+                if isinstance(extracted, dict):
+                    title2 = extracted.get("title") or ""
+                    content2 = extracted.get("content") or extracted.get("combined_text") or ""
+                elif isinstance(extracted, (tuple, list)) and len(extracted) >= 2:
+                    title2, content2 = extracted[0] or "", extracted[1] or ""
+                else:
+                    title2, content2 = "", ""
                 if content2 and len(content2) > len(text):
                     merged = (text + ("\n" if text else "") + content2).strip()
                     text = merged
+                    if title2 and not title:
+                        title = title2
                     # if blocks empty, at least put one text block
                     if not blocks:
                         blocks.append(ContentBlock(type="text", content=content2, position=0))

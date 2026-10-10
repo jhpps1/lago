@@ -49,7 +49,7 @@ public class AiBotService {
                     });
 
             // 지침서 명세: 해당 user_id 기준으로 봇 전용 계좌 조회
-            Account aiAccount = accountRepository.findByUserIdAndType(aiUser.getUserId(), ACCOUNT_TYPE_MOCK_TRADING)
+            Account aiAccount = accountRepository.findByUserIdAndType(aiUser.getUserId(), ACCOUNT_TYPE_AI_BOT)
                     .orElseThrow(() -> {
                         log.error("AI 봇 계좌를 찾을 수 없습니다. userId={}", aiUser.getUserId());
                         return new RuntimeException("AI 봇 계좌를 찾을 수 없습니다.");
@@ -109,7 +109,7 @@ public class AiBotService {
                 .orElseThrow(() -> new RuntimeException("해당 aiId의 AI 봇 사용자를 찾을 수 없습니다."));
 
         //해당 user_id 기준으로 봇 전용 계좌 조회
-        Account aiAccount = accountRepository.findByUserIdAndType(aiUser.getUserId(), ACCOUNT_TYPE_MOCK_TRADING)
+        Account aiAccount = accountRepository.findByUserIdAndType(aiUser.getUserId(), ACCOUNT_TYPE_AI_BOT)
                 .orElseThrow(() -> new RuntimeException("AI 봇 계좌를 찾을 수 없습니다."));
 
         //거래 횟수 및 평균값 조회
@@ -140,7 +140,7 @@ public class AiBotService {
                 .map(aiBot -> {
                     // 각 AI 봇의 계좌 정보 조회 (계좌는 무조건 존재)
                     Account account = accountRepository.findByUserIdAndType(
-                            aiBot.getUserId(), ACCOUNT_TYPE_MOCK_TRADING
+                            aiBot.getUserId(), ACCOUNT_TYPE_AI_BOT
                     ).orElseThrow(() -> new RuntimeException("AI 봇 계좌를 찾을 수 없습니다: " + aiBot.getUserId()));
                     
                     log.info("AI 봇 조회: userId={}, aiId={}, nickname={}, personality={}, totalAsset={}, profit={}, profitRate={}%", 

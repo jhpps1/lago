@@ -545,7 +545,7 @@ def extract_news_content_with_title(url):
             if not content or len(content) < MIN_ARTICLE_LEN:
                 html_raw = response.text
                 soup2 = BeautifulSoup(html_raw, "html.parser")
-                for sel in ["#newsct_article", ".article-body", ".article-content", "article", ".entry-content", ".post-content"]:
+                for sel in ["#CmAdContent", "#newsct_article", ".article-body", ".article-content", "article", ".entry-content", ".post-content"]:
                     node = soup2.select_one(sel)
                     if not node:
                         continue
